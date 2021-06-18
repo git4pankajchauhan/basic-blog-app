@@ -1,0 +1,21 @@
+@import '../../Assets/css/var';
+
+.head {
+  background: $clr-body;
+  display: flex;
+  justify-content: space-between;
+  padding: 2rem 5rem;
+  align-items: center;
+  .head-title {
+    color: #fff;
+  }
+  .l-wrap {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 50px;
+    .user {
+      color: #fff;
+    }
+  }
+}

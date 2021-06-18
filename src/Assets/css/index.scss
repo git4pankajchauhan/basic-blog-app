@@ -1,0 +1,95 @@
+@import './var';
+@import url('https://fonts.googleapis.com/css2?family=Acme&family=Roboto&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+:focus {
+  outline: none;
+}
+a {
+  text-decoration: none;
+}
+body {
+  font-family: $ff-main;
+  color: $clr-body;
+  font-size: 1.3rem;
+  background-color: $clr-bg;
+}
+
+html {
+  font-size: 62.5%;
+  scroll-behavior: smooth;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: $ff-head;
+}
+.message {
+  margin-bottom: 1rem;
+  padding: 1.5rem;
+  background: rgba($clr-success, 0.2);
+  border-left: 2px solid;
+  color: $clr-success;
+  animation: fadeIn ease 0.5s;
+}
+.user-form {
+  max-width: 400px;
+  background: #fff;
+  padding: 4rem;
+  margin: 5rem auto;
+  box-shadow: 0 5px 5px -3px $clr-shadow;
+  .form-title {
+    margin-bottom: 3rem;
+    text-align: center;
+  }
+  button {
+    justify-content: center !important;
+    width: 100% !important;
+    margin-top: 2rem !important;
+  }
+}
+@media (max-width: 768px) {
+  html {
+    font-size: 54%;
+  }
+}
+
+@media (max-width: 576px) {
+  html {
+    font-size: 50%;
+  }
+}
+
+/* Animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes fadeOut {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+@keyframes popUp {
+  from {
+    transform: scale(0);
+  }
+  to {
+    transform: scale(1);
+  }
+}

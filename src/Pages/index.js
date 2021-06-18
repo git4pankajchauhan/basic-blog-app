@@ -1,6 +1,7 @@
-import Home from './Home';
-import Profile from './Profile';
-import Login from './Auth/Login';
-import Signup from './Auth/Signup';
+import Navbar from 'Components/Navbar/Navbar';
+import Login from 'Pages/Login';
+import Posts from 'Pages/Post/Posts';
+import Signup from 'Pages/Signup';
+import Post from 'Pages/Post/Post';
 
-export { Home, Profile, Login, Signup };
+export { Navbar, Login, Posts, Signup, Post };
