@@ -5,50 +5,42 @@ import CustomDrawer from 'Components/Drawer/CustomDrawer';
 import { CustomInput, CustomTextArea } from 'Components/Input/CustomInput';
 import Post from 'Components/Post/Post';
 import React, { useState } from 'react';
+import { useEffect } from 'react';
+import { connect, useDispatch } from 'react-redux';
 import { withRouter } from 'react-router-dom';
+import { bindActionCreators } from 'redux';
 import './Style/Post.scss';
+import { getPostsAction } from 'Store/actions/post.action';
+import { openDrawer } from 'Store/actions/common.action';
 
-const Posts = () => {
-  const [posts, setPosts] = useState([]);
-  const [search, setSearch] = useState('');
-  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+const Posts = ({ posts, getPostsAction }) => {
+  const dispatch = useDispatch();
+  const onCreatePost = e => {};
+  const onChange = e => {};
 
-  const [addPost, setAddPost] = useState({
-    title: '',
-    sub_title: '',
-    tags: '',
-    content: '',
-  });
+  useEffect(() => {
+    getPostsAction();
+  }, []);
 
-  const onChange = e => {
-    const { name, value } = e.target;
-    setAddPost(preVal => {
-      return {
-        ...preVal,
-        [name]: value,
-      };
-    });
-  };
-
-  const onCreatePost = async e => {
-    e.preventDefault();
-  };
-
+  console.log(posts);
   return (
     <section className="post-section">
       <div className="body">
         <div className="filter-wrap">
-          <input type="text" className="filter-post" onChange={e => setSearch(e.target.value)} value={search} placeholder="Search by tags..." />
-
-          <CustomButton onClick={e => setIsDrawerOpen(!isDrawerOpen)}>
+          <input type="text" className="filter-post" placeholder="Search by tags..." />
+          <CustomButton onClick={() => dispatch(openDrawer())}>
             <Add />
             Create New Post
           </CustomButton>
         </div>
-        <div className="post-container">{!posts.length ? <h2>No Post Found</h2> : posts.map(post => <Post key={post._id} post={post} />)}</div>
+        <div className="post-container">
+          {posts.map(post => (
+            <Post key={post._id} {...post} />
+          ))}
+        </div>
       </div>
 
-      <CustomDrawer headTitle="Add New Post" isOpen={isDrawerOpen} closeHandle={e => setIsDrawerOpen(!isDrawerOpen)}>
+      <CustomDrawer headTitle="Add New Post">
         <form onSubmit={onCreatePost}>
           <CustomInput type="text" name="title" onChange={onChange} placeholder="Enter Title" />
           <CustomInput type="text" name="sub_title" onChange={onChange} placeholder="Enter Sub Title" />
@@ -61,4 +53,13 @@ const Posts = () => {
   );
 };
 
-export default withRouter(Posts);
+const mapStateToProps = state => {
+  return {
+    posts: state.PostsReducer.posts,
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return bindActionCreators({ getPostsAction }, dispatch);
+};
+export default connect(mapStateToProps, mapDispatchToProps)(Posts);
