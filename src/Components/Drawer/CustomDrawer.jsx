@@ -1,38 +1,26 @@
 import { Close } from '@material-ui/icons';
-import React, { useState } from 'react';
-import CustomButton from 'Components/Button/CustomButton';
-import './CustomDrawer.scss';
+import React, { useRef } from 'react';
+import { Drawer } from './Style/CustomDrawerStyle';
 
-const CustomDrawer = ({ children, btnText, label, icon, color }) => {
-  const [drawer, setDrawer] = useState(false);
+const CustomDrawer = props => {
+  const containerRef = useRef(null);
 
-  /* Handle Click Outside */
-  const handleClickOutside = e => {
-    const bgElement = document.querySelector('.c-drawer-bg');
-    const element = document.querySelector('.c-drawer-container');
-    if (bgElement === e.target && element !== e.target) {
-      setDrawer(false);
+  const onClose = e => {
+    if (containerRef.current === e.target) {
+      props.closeHandle();
     }
   };
 
-  return (
-    <>
-      <CustomButton color={color} onClick={() => setDrawer(true)}>
-        {icon && icon}
-        {btnText}
-      </CustomButton>
-      {drawer && (
-        <div className="c-drawer-bg" onClick={handleClickOutside}>
-          <div className="c-drawer-container">
-            <div className="c-drawer-head">
-              <Close onClick={() => setDrawer(false)} /> {label}
-            </div>
-            <div className="c-drawer-children">{children}</div>
-          </div>
+  return props.isOpen ? (
+    <Drawer ref={containerRef} onClick={onClose}>
+      <div className="c-drawer-container">
+        <div className="c-drawer-head">
+          <Close onClick={props.closeHandle} /> {props.headTitle}
         </div>
-      )}
-    </>
-  );
+        <div className="c-drawer-children">{props.children}</div>
+      </div>
+    </Drawer>
+  ) : null;
 };
 
 export default CustomDrawer;

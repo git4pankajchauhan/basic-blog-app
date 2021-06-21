@@ -1,7 +1,8 @@
-import Navbar from 'Components/Navbar/Navbar';
-import Login from 'Pages/Login';
-import Posts from 'Pages/Post/Posts';
-import Signup from 'Pages/Signup';
+import Header from 'Components/Header/Header';
+import Login from 'Pages/Login/Login';
 import Post from 'Pages/Post/Post';
+import Signup from 'Pages/Signup/Signup';
+import Posts from 'Pages/Post/Posts';
+import Home from './Home';
 
-export { Navbar, Login, Posts, Signup, Post };
+export { Header, Login, Post, Signup, Posts, Home };

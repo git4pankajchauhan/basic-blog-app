@@ -1,20 +1,11 @@
-import Axios from 'axios';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useParams, withRouter } from 'react-router-dom';
-import './Posts.scss';
+import './Style/Post.scss';
 
 const SinglePost = () => {
   const [posts, setPosts] = useState([]);
   const { id } = useParams();
 
-  // Get Single Post Details
-  const postsData = async () => {
-    const postdata = await Axios.get(`http://localhost:5000/post/getsingle/${id}`);
-    setPosts(postdata.data);
-  };
-  useEffect(() => {
-    postsData();
-  }, []);
   return (
     <section className="spost-section">
       <div className="post-box">

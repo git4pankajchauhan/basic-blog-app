@@ -1,10 +1,10 @@
+import 'Assets/css/index.scss';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
-import 'Assets/css/index.scss';
 import { ThemeProvider } from 'styled-components';
+import App from './App';
 import { color, font } from './Assets/Style/themes';
+import reportWebVitals from './reportWebVitals';
 
 ReactDOM.render(
   <React.StrictMode>
