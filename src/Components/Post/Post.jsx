@@ -5,16 +5,17 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 import './Post.scss';
 
-const Post = ({ id, tags, title, sub_title, content }) => {
+const Post = props => {
   return (
     <div className="post-box">
       <div className="post-info">
-        <span className="tags">{tags}</span>
-        <h2 className="title">{title}</h2>
-        <p className="sub-title">{sub_title}</p>
+        <span className="tags">{props.tags}</span>
+        <h2 className="title">{props.title}</h2>
+        <p className="sub-title">{props.subTitle}</p>
+        <p className="sub-title">{props.description}</p>
       </div>
       <div className="btns-wrap">
-        <NavLink className="btn-link" to={`/post/${id}`}>
+        <NavLink className="btn-link" to={`/post/${props.id}`}>
           <CustomButton color={color.default}>View Post</CustomButton>
         </NavLink>
         <CustomButton color={color.success}>Edit Post</CustomButton>

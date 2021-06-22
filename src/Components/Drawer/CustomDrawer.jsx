@@ -1,9 +1,9 @@
 import { Close } from '@material-ui/icons';
 import React, { useRef } from 'react';
 import { connect } from 'react-redux';
-import { Drawer } from './Style/CustomDrawerStyle';
-import { closeDrawer } from 'Store/actions/common.action';
 import { bindActionCreators } from 'redux';
+import { closeDrawer } from 'Store/actions/common.action';
+import { Drawer } from './Style/CustomDrawerStyle';
 
 const CustomDrawer = props => {
   const containerRef = useRef(null);

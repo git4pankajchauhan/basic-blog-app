@@ -1,4 +1,4 @@
-import { CLOSE_DRAWER, OPEN_DRAWER, TOGGLE_DRAWER } from 'Store/constants/common.constant';
+import { CLOSE_DRAWER, OPEN_DRAWER } from 'Store/constants/common.constant';
 
 const initialState = {
   isDrawerOpen: false,

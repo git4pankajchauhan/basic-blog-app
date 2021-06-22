@@ -8,7 +8,7 @@ const App = () => {
       <Header />
       <Switch>
         <Route path="/" component={Home} exact />
-        <Route path="/posts" component={Posts} exact />
+        <Route path="/posts" component={Posts} />
         <Route path="/post/:id" component={Post} />
         <Route path="/signup" component={Signup} />
         <Route path="/login" component={Login} />

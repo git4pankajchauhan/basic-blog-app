@@ -7,7 +7,7 @@ export function getPostsAction() {
       const posts = await getPosts();
       dispatch(confirmedGetPostsAction(posts.data));
     } catch (error) {
-      console.log(error);
+      console.log('get post action error', error);
     }
   };
 }
@@ -18,6 +18,25 @@ export function confirmedGetPostsAction(posts) {
     payload: posts,
   };
 }
+
+export const createPostAction = (postData, history) => async (dispatch, getState) => {
+  try {
+    await createPost(postData);
+    const singlePost = {
+      _id: Math.random(),
+      ...postData,
+    };
+    dispatch(confirmedCreatePostAction(singlePost));
+    history.push('/posts');
+  } catch (error) {
+    console.log('create post action error', error);
+  }
+};
+
+export const confirmedCreatePostAction = post => ({
+  type: CONFIRMED_CREATE_POST_ACTION,
+  payload: post,
+});
 
 // export function deletePostAction(postId) {
 //   return (dispatch, getState) => {
