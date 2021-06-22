@@ -1,4 +1,4 @@
-import { CONFIRMED_CREATE_POST_ACTION, CONFIRMED_DELETE_POST_ACTION, CONFIRMED_EDIT_POST_ACTION, CONFIRMED_GET_POSTS, CREATE_POST_ACTION } from '../constants/post.constant';
+import { CONFIRMED_CREATE_POST_ACTION, CONFIRMED_DELETE_POST_ACTION, CONFIRMED_EDIT_POST_ACTION, CONFIRMED_GET_POSTS, CREATE_POST_ACTION, GET_POSTS_BY_TAG } from '../constants/post.constant';
 
 const initialState = {
   posts: [],
@@ -20,53 +20,35 @@ export default function PostsReducer(state = initialState, actions) {
     };
   }
 
-  // if (actions.type === CREATE_POST_ACTION) {
-  //   const post = {
-  //     idpayload: Math.random(),
-  //     title: 'Post Title 2asdasd',
-  //     description: 'Sample Description 2asdasdas',
-  //   };
+  if (actions.type === CONFIRMED_DELETE_POST_ACTION) {
+    const posts = [...state.posts];
+    const postIndex = posts.findIndex(post => post._id === actions.payload);
+    posts.splice(postIndex, 1);
+    return {
+      ...state,
+      posts,
+    };
+  }
 
-  //   const posts = [...state.posts];
-  //   posts.push(post);
-  //   return {
-  //     ...state,
-  //     posts,
-  //   };
-  // }
+  if (actions.type === CONFIRMED_EDIT_POST_ACTION) {
+    const posts = [...state.posts];
+    const postIndex = posts.findIndex(post => post._id === actions.payload._id);
 
-  // if (actions.type === CONFIRMED_DELETE_POST_ACTION) {
-  //   const posts = [...state.posts];
-  //   const postIndex = posts.findIndex(post => post.id === actions.payload);
+    posts[postIndex] = actions.payload;
+    return {
+      ...state,
+      posts,
+    };
+  }
 
-  //   posts.splice(postIndex, 1);
-
-  //   return {
-  //     ...state,
-  //     posts,
-  //   };
-  // }
-
-  // if (actions.type === CONFIRMED_EDIT_POST_ACTION) {
-  //   const posts = [...state.posts];
-  //   const postIndex = posts.findIndex(post => post.id === actions.payload.id);
-
-  //   posts[postIndex] = actions.payload;
-  //   return {
-  //     ...state,
-  //     posts,
-  //   };
-  // }
-
-  // if (actions.type === CONFIRMED_CREATE_POST_ACTION) {
-  //   const posts = [...state.posts];
-  //   posts.push(actions.payload);
-
-  //   return {
-  //     ...state,
-  //     posts,
-  //   };
-  // }
+  if (actions.type === GET_POSTS_BY_TAG) {
+    const posts = [...state.posts];
+    const filtered_posts = posts.filter(post => post.tags.includes(actions.payload));
+    return {
+      ...state,
+      posts: filtered_posts,
+    };
+  }
 
   return state;
 }

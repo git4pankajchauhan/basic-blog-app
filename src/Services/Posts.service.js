@@ -1,26 +1,16 @@
 import axiosInstance from './AxiosInstance';
 
 // get posts
-export function getPosts() {
-  return axiosInstance.get(`/post`);
-}
+export const getPosts = () => axiosInstance.get(`/post`);
+
 // get post by tag name
-// export function getPostByTag(postTag) {
-//   return axiosInstance.get(`/post/${postTag}`);
-// }
-// get single post by id
-// export function getSinglePost(postId) {
-//   return axiosInstance.get(`/post/getsingle/${postId}`);
-// }
+export const getPostByTag = postTag => axiosInstance.get(`/post/${postTag}`);
+
 // create post
-export function createPost(postData) {
-  return axiosInstance.post(`/post`, postData);
-}
+export const createPost = postData => axiosInstance.post(`/post`, postData);
+
 // update post
-// export function updatePost(postId, post) {
-//   return axiosInstance.patch(`/post/${postId}`, post);
-// }
+export const updatePost = (postId, post) => axiosInstance.patch(`/post/${postId}`, post);
+
 // delete post
-// export function deletePost(postId) {
-//   return axiosInstance.delete(`/post/${postId}`);
-// }
+export const deletePost = postId => axiosInstance.delete(`/post/${postId}`);

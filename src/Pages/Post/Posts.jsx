@@ -1,38 +1,48 @@
 import { Add } from '@material-ui/icons';
 import CreatePostForm from 'Components/Post/CreatePostForm';
+import EditPostForm from 'Components/Post/EditPostForm ';
 import Post from 'Components/Post/Post';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { connect, useDispatch } from 'react-redux';
 import { Link, Route, Switch } from 'react-router-dom';
 import { bindActionCreators } from 'redux';
-import { getPostsAction } from 'Store/actions/post.action';
+import { getPostsAction, getPostActionByTag } from 'Store/actions/post.action';
 import './Style/Post.scss';
 
-const Posts = ({ posts, getPostsAction }) => {
+const Posts = ({ posts, getPostsAction, ...props }) => {
+  const [search, setSearch] = useState('');
   const dispatch = useDispatch();
 
+  const onSearch = e => {
+    setSearch(e.target.value);
+  };
+
   useEffect(() => {
-    getPostsAction();
-  }, []);
+    if (search) {
+      dispatch(getPostActionByTag(search));
+    } else {
+      getPostsAction();
+    }
+  }, [search]);
 
   return (
     <section className="post-section">
       <div className="body">
         <div className="filter-wrap">
-          <input type="text" className="filter-post" placeholder="Search by tags..." />
+          <input type="text" className="filter-post" placeholder="Search by tags..." onChange={onSearch} value={search} />
           <Link className="text-dark" to={{ pathname: `/posts/create-post` }}>
             <Add /> Create New Post
           </Link>
         </div>
         <div className="post-container">
           {posts.map(post => (
-            <Post key={post._id} {...post} />
+            <Post key={post._id} {...post} history={props.history} />
           ))}
         </div>
       </div>
-
       <Switch>
-        <Route path="/posts/create-post" component={CreatePostForm} />
+        <Route path="/posts/create-post" exact component={CreatePostForm} />
+        {posts.length && <Route path="/posts/edit/:id" exact component={EditPostForm} />}
       </Switch>
     </section>
   );

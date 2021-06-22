@@ -1,23 +1,49 @@
-import React, { useState } from 'react';
-import { useParams, withRouter } from 'react-router-dom';
+import { color } from 'Assets/Style/themes';
+import CustomButton from 'Components/Button/CustomButton';
+import React, { useEffect, useState } from 'react';
+import { connect } from 'react-redux';
+import { getPost } from 'Store/selectors/Post.selectors';
 import './Style/Post.scss';
 
-const SinglePost = () => {
-  const [posts, setPosts] = useState([]);
-  const { id } = useParams();
+const SinglePost = props => {
+  const [post, setPost] = useState({ ...props.post });
+
+  useEffect(() => {
+    if (props.post) {
+      setPost(props.post);
+    } else {
+      props.history.push('/posts');
+    }
+  }, [props.match.params]);
 
   return (
     <section className="spost-section">
       <div className="post-box">
         <div className="post-info">
-          <span className="tags">{posts.tags}</span>
-          <h2 className="title">{posts.title}</h2>
-          <p className="sub-title">{posts.sub_title}</p>
-          <p className="description">{posts.content}</p>
+          <span className="tags">{post.tags}</span>
+          <h2 className="title">{post.title}</h2>
+          <p className="sub-title">{post.subTitle}</p>
+          <p className="description">{post.description}</p>
+          <CustomButton
+            color={color.primary}
+            onClick={() => {
+              props.history.push('/posts');
+            }}>
+            Go Back To Post
+          </CustomButton>
         </div>
       </div>
     </section>
   );
 };
 
-export default withRouter(SinglePost);
+const mapStateToProps = state => {
+  const post = getPost();
+  return (state, props) => {
+    return {
+      post: post(state, props.match.params.id),
+    };
+  };
+};
+
+export default connect(mapStateToProps)(SinglePost);

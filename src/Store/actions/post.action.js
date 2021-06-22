@@ -1,31 +1,29 @@
-import { getPosts, getPostByTag, getSinglePost, createPost, updatePost, deletePost } from 'Services/Posts.service';
-import { GET_POSTS, CREATE_POST_ACTION, EDIT_POST_ACTION, CONFIRMED_GET_POSTS, CONFIRMED_CREATE_POST_ACTION, CONFIRMED_EDIT_POST_ACTION, CONFIRMED_DELETE_POST_ACTION } from 'Store/constants/post.constant';
+import { createPost, deletePost, getPosts, updatePost } from 'Services/Posts.service';
+import { CONFIRMED_CREATE_POST_ACTION, CONFIRMED_DELETE_POST_ACTION, CONFIRMED_EDIT_POST_ACTION, CONFIRMED_GET_POSTS, GET_POSTS_BY_TAG } from 'Store/constants/post.constant';
 
-export function getPostsAction() {
-  return async (dispatch, getState) => {
-    try {
-      const posts = await getPosts();
-      dispatch(confirmedGetPostsAction(posts.data));
-    } catch (error) {
-      console.log('get post action error', error);
-    }
-  };
-}
+export const getPostsAction = () => async (dispatch, getState) => {
+  try {
+    const posts = await getPosts();
+    dispatch(confirmedGetPostsAction(posts.data));
+  } catch (error) {
+    console.log('get post action error', error);
+  }
+};
 
-export function confirmedGetPostsAction(posts) {
-  return {
-    type: CONFIRMED_GET_POSTS,
-    payload: posts,
-  };
-}
+export const confirmedGetPostsAction = posts => ({
+  type: CONFIRMED_GET_POSTS,
+  payload: posts,
+});
+
+export const getPostActionByTag = tags => ({
+  type: GET_POSTS_BY_TAG,
+  payload: tags,
+});
 
 export const createPostAction = (postData, history) => async (dispatch, getState) => {
   try {
-    await createPost(postData);
-    const singlePost = {
-      _id: Math.random(),
-      ...postData,
-    };
+    const result = await createPost(postData);
+    const singlePost = result.data.lastpost;
     dispatch(confirmedCreatePostAction(singlePost));
     history.push('/posts');
   } catch (error) {
@@ -38,56 +36,32 @@ export const confirmedCreatePostAction = post => ({
   payload: post,
 });
 
-// export function deletePostAction(postId) {
-//   return (dispatch, getState) => {
-//     try {
-//       await deletePost(postId);
-//       dispatch(confirmedDeletePostAction(postId));
-//     } catch (error) {
-//       console.log(error);
-//     }
-//   };
-// }
+export const deletePostAction = (postId, history) => async (dispatch, getState) => {
+  try {
+    await deletePost(postId);
+    dispatch(confirmedDeletePostAction(postId));
+    history.push('/posts');
+  } catch (error) {
+    console.log('delete post action error', error);
+  }
+};
 
-// export function confirmedDeletePostAction(postId) {
-//   return {
-//     type: CONFIRMED_DELETE_POST_ACTION,
-//     payload: postId,
-//   };
-// }
+export const confirmedDeletePostAction = postId => ({
+  type: CONFIRMED_DELETE_POST_ACTION,
+  payload: postId,
+});
 
-// export function createPostAction(postData, history) {
-//   return (dispatch, getState) => {
-//     createPost(postData).then(response => {
-//       const singlePost = {
-//         ...postData,
-//         id: response.data.name,
-//       };
-//       dispatch(confirmedCreatePostAction(singlePost));
-//       history.push('/posts');
-//     });
-//   };
-// }
+export const updatePostAction = (post, history) => async (dispatch, getState) => {
+  try {
+    await updatePost(post._id, post);
+    dispatch(confirmedUpdatePostAction(post));
+    history.push('/posts');
+  } catch (error) {
+    console.log('update post action error', error);
+  }
+};
 
-// export function confirmedCreatePostAction(singlePost) {
-//   return {
-//     type: CONFIRMED_CREATE_POST_ACTION,
-//     payload: singlePost,
-//   };
-// }
-
-// export function confirmedUpdatePostAction(post) {
-//   return {
-//     type: CONFIRMED_EDIT_POST_ACTION,
-//     payload: post,
-//   };
-// }
-
-// export function updatePostAction(post, history) {
-//   return (dispatch, getState) => {
-//     updatePost(post, post.id).then(reponse => {
-//       dispatch(confirmedUpdatePostAction(post));
-//       history.push('/posts');
-//     });
-//   };
-// }
+export const confirmedUpdatePostAction = post => ({
+  type: CONFIRMED_EDIT_POST_ACTION,
+  payload: post,
+});
