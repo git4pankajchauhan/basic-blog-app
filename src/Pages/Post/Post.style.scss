@@ -1,4 +1,4 @@
-@import '../../../Assets/css/var';
+@import 'Assets/css/var';
 
 .post-section {
   .body {
@@ -9,18 +9,12 @@
       align-items: center;
       .filter-post {
         padding: 1rem;
-        border: 1px solid $clr-default;
+        border: 1px solid $clr-grey;
         color: $clr-body;
-      }
-      & > button {
-        border: none;
-        background: no-repeat;
-        display: flex;
-        align-items: center;
-        font-size: 1.2rem;
-        gap: 4px;
-        cursor: pointer;
-        color: $clr-body;
+      } 
+      .add-post-btn{
+        text-decoration: none;
+        color: $clr-dark;
       }
     }
   }

@@ -3,7 +3,7 @@ import CustomButton from 'Components/Button/CustomButton';
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { getPost } from 'Store/selectors/Post.selectors';
-import './Style/Post.scss';
+import './Post.style.scss';
 
 const SinglePost = props => {
   const [post, setPost] = useState({ ...props.post });
