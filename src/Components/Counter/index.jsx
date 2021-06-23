@@ -1,11 +1,11 @@
-import React from 'react';
-import { connect, useDispatch } from 'react-redux';
-import { counterDecrement, counterIncrement, counterReset } from 'Store/actions/counter.action';
-import CustomButton from 'Components/Button/CustomButton';
-import { color } from 'Assets/Style/themes';
+import React from 'react'
+import { connect, useDispatch } from 'react-redux'
+import { counterDecrement, counterIncrement, counterReset } from 'Store/actions/counter.action'
+import CustomButton from 'Components/Button/CustomButton'
+import { color } from 'Assets/Style/themes'
 
 const Couter = props => {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch()
   return (
     <div style={{ textAlign: 'center' }}>
       <h1>Couter Page</h1>
@@ -22,9 +22,9 @@ const Couter = props => {
         </CustomButton>
       </div>
     </div>
-  );
-};
+  )
+}
 const mapStateToProps = state => {
-  return { counter: state.CounterReducer.counter };
-};
-export default connect(mapStateToProps)(Couter);
+  return { counter: state.counter.counter }
+}
+export default connect(mapStateToProps)(Couter)

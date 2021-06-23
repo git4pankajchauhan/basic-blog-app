@@ -1,5 +1,5 @@
-import { createSelector } from 'reselect';
+import { createSelector } from 'reselect'
 
-export const getPostById = (state, postId) => state.PostsReducer.posts.find(post => post._id === postId);
+export const getPostById = (state, postId) => state.posts.posts.find(post => post._id === postId)
 
-export const getPost = () => createSelector([getPostById], post => post);
+export const getPost = () => createSelector([getPostById], post => post)
