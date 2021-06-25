@@ -1,57 +1,63 @@
-import { login, runLogoutTimer, saveTokenInLocalStorage, signup } from 'Services/auth.service'
-import { LOGIN_CONFIRMED_ACTION, LOGOUT_ACTION } from 'Store/constants/auth.constant'
-import { errorMessage, successMessage, toggleLoader } from './common.action'
+import { loadUser, login, signup } from 'Services/auth.service'
+import { AUTH_ERROR, LOGIN_SUCCESS, LOGOUT_SUCCESS, USER_LOADED } from 'Store/constants/auth.constant'
+import { toggleLoader } from './common.action'
+import { getMessage } from './message.action'
+
+export const loadUserAction = () => async (dispatch, getState) => {
+  try {
+    const response = await loadUser()
+    dispatch(loaderUserActionSuccess(response.data.user))
+  } catch (e) {
+    console.log('user load action error:', e)
+    dispatch(authError())
+  }
+}
 
 export const signupAction = (userdata, history) => async dispatch => {
   try {
     const response = await signup(userdata)
+    dispatch(getMessage(response.data.message))
 
-    if (response.data.status) {
-      dispatch(successMessage(response.data.message))
-      history.push('/login')
-    } else {
-      dispatch(errorMessage(response.data.message))
-    }
-  } catch (error) {
-    console.log('signup action error:', error)
-    dispatch(errorMessage('Oops! Something went wrong.'))
+    history.push('/login')
+  } catch (e) {
+    console.log('signup action error:', e)
+    dispatch(getMessage(e.response.data, e.response.status, 'REGISTER_FAIL'))
+    dispatch(authError())
   }
-
   dispatch(toggleLoader(false))
 }
+
 export const loginAction = (userdata, history) => async dispatch => {
   try {
     const response = await login(userdata)
-    console.log(response.data)
-    if (response.data.status) {
-      const { isAuth, token, user } = response.data
 
-      saveTokenInLocalStorage({ isAuth, token, user })
-      // runLogoutTimer(dispatch, response.data.expiresIn * 1000, history)
-      // dispatch(loginConfirmedAction({ isAuth, token, user }))
-      // history.push('/posts')
-    } else {
-      dispatch(errorMessage(response.data.message))
-    }
-  } catch (error) {
-    console.log('login action error:', error)
-    dispatch(errorMessage('Oops! Something went wrong.'))
+    dispatch(loginActionSuccess({ user: response.data.user, token: response.data.token }))
+    history.push('/posts')
+  } catch (e) {
+    console.log('login action error:', e.response)
+    // dispatch(getMessage(e.response.data, e.response.status, 'REGISTER_FAIL'))
+    dispatch(authError())
   }
-
   dispatch(toggleLoader(false))
 }
 
-export function loginConfirmedAction(data) {
-  return {
-    type: LOGIN_CONFIRMED_ACTION,
-    payload: data,
-  }
-}
+export const loginActionSuccess = userdata => ({
+  type: LOGIN_SUCCESS,
+  payload: userdata,
+})
 
-export function logout(history) {
-  localStorage.removeItem('userToken')
+export const loaderUserActionSuccess = user => ({
+  type: USER_LOADED,
+  payload: user,
+})
+
+export const authError = () => ({
+  type: AUTH_ERROR,
+})
+
+export const logoutAction = history => {
   history.push('/login')
   return {
-    type: LOGOUT_ACTION,
+    type: LOGOUT_SUCCESS,
   }
 }

@@ -1,12 +1,17 @@
 import { Person } from '@material-ui/icons'
 import React from 'react'
-import { useSelector } from 'react-redux'
-import { NavLink } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
+import { NavLink, withRouter } from 'react-router-dom'
+import { logoutAction } from 'Store/actions/auth.action'
 import './Header.scss'
 
-const Header = () => {
-  const auth = useSelector(state => state.auth.auth)
+const Header = props => {
+  const dispatch = useDispatch()
+  const auth = useSelector(state => state.auth)
 
+  const onLogout = () => {
+    dispatch(logoutAction(props.history))
+  }
   return (
     <div className='head'>
       <span className='head-title'>Blog App </span>
@@ -22,9 +27,10 @@ const Header = () => {
             <span className='user username'>
               <Person /> Hi, {auth.user.name}
             </span>
-            <NavLink className='user' activeClassName='active' to='/logout'>
+
+            <span className='user logout' onClick={onLogout}>
               Logout
-            </NavLink>
+            </span>
           </>
         )}
         {!auth.isAuth && (
@@ -42,4 +48,4 @@ const Header = () => {
   )
 }
 
-export default Header
+export default withRouter(Header)

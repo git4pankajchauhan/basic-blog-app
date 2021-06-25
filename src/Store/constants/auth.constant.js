@@ -1,9 +1,14 @@
-export const SIGNUP_CONFIRMED_ACTION = '[signup action] confirmed signup'
-export const SIGNUP_FAILED_ACTION = '[signup action] failed signup'
+export const USER_LOADING = 'USER_LOADING'
+export const USER_LOADED = 'USER_LOADED'
 
-export const LOGIN_CONFIRMED_ACTION = '[login action] confirmed login'
-export const LOGIN_FAILED_ACTION = '[login action] failed login'
+export const LOGIN_SUCCESS = 'LOGIN_SUCCESS'
+export const LOGIN_FAIL = 'LOGIN_FAIL'
 
-export const LOADING_TOGGLE_ACTION = '[Loading action] toggle loading'
+export const REGISTER_SUCCESS = 'REGISTER_SUCCESS'
+export const REGISTER_FAIL = 'REGISTER_FAIL'
 
-export const LOGOUT_ACTION = '[Logout action] logout action'
+export const LOGOUT_SUCCESS = 'LOGOUT_SUCCESS'
+
+export const GET_ERRORS = 'GET_ERRORS'
+export const CLEAR_ERRORS = 'CLEAR_ERRORS'
+export const AUTH_ERROR = 'AUTH_ERROR'

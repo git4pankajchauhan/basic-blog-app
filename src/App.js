@@ -1,17 +1,19 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Redirect, Route, Switch, withRouter } from 'react-router-dom'
-import { checkAutoLogin } from 'Services/auth.service'
+import { loadUserAction } from 'Store/actions/auth.action'
 import { Header, Home, Login, Post, Posts, Signup } from './Pages'
 
 const App = props => {
-  const isAuth = useSelector(state => state.auth.auth.isAuth)
+  const isAuth = useSelector(state => state.auth.isAuth)
 
   const dispatch = useDispatch()
 
   useEffect(() => {
-    checkAutoLogin(dispatch, props.history)
-  }, [])
+    if (localStorage.getItem('jwtoken')) {
+      dispatch(loadUserAction())
+    }
+  }, [dispatch])
 
   return (
     <>

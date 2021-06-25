@@ -1,24 +1,26 @@
 import { Close } from '@material-ui/icons'
 import React, { useRef } from 'react'
-import { connect } from 'react-redux'
-import { bindActionCreators } from 'redux'
-import { closeDrawer } from 'Store/actions/common.action'
+import { useDispatch, useSelector } from 'react-redux'
+import { toggleDrawer } from 'Store/actions/common.action'
 import { Drawer } from './Style/CustomDrawerStyle'
 
 const CustomDrawer = props => {
   const containerRef = useRef(null)
 
+  const isDrawerOpen = useSelector(state => state.common.isDrawerOpen)
+  const dispatch = useDispatch()
+
   const onClose = e => {
     if (containerRef.current === e.target) {
-      props.closeDrawer()
+      dispatch(toggleDrawer(false))
     }
   }
 
-  return props.isDrawerOpen ? (
+  return isDrawerOpen ? (
     <Drawer ref={containerRef} onClick={onClose}>
       <div className='c-drawer-container'>
         <div className='c-drawer-head'>
-          <Close onClick={props.closeDrawer} /> {props.headTitle}
+          <Close onClick={dispatch(toggleDrawer(false))} /> {props.headTitle}
         </div>
         <div className='c-drawer-children'>{props.children}</div>
       </div>
@@ -26,10 +28,4 @@ const CustomDrawer = props => {
   ) : null
 }
 
-const mapStateToProps = state => ({
-  isDrawerOpen: state.common.isDrawerOpen,
-})
-
-const mapDispatchToProps = dispatch => bindActionCreators({ closeDrawer }, dispatch)
-
-export default connect(mapStateToProps, mapDispatchToProps)(CustomDrawer)
+export default CustomDrawer
