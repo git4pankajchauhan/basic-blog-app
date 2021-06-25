@@ -1,20 +1,39 @@
-import React from 'react';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
-import { Home, Login, Header, Post, Posts, Signup } from './Pages';
+import React, { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { Redirect, Route, Switch, withRouter } from 'react-router-dom'
+import { checkAutoLogin } from 'Services/auth.service'
+import { Header, Home, Login, Post, Posts, Signup } from './Pages'
 
-const App = () => {
+const App = props => {
+  const isAuth = useSelector(state => state.auth.auth.isAuth)
+
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    checkAutoLogin(dispatch, props.history)
+  }, [])
+
   return (
-    <BrowserRouter>
+    <>
       <Header />
-      <Switch>
-        <Route path="/" component={Home} exact />
-        <Route path="/posts" component={Posts} />
-        <Route path="/post/:id" component={Post} />
-        <Route path="/signup" component={Signup} />
-        <Route path="/login" component={Login} />
-      </Switch>
-    </BrowserRouter>
-  );
-};
+      {!isAuth && (
+        <Switch>
+          <Route path='/' component={Home} exact />
+          <Route path='/signup' component={Signup} />
+          <Route path='/login' component={Login} />
+          <Redirect to='/login' />
+        </Switch>
+      )}
+      {isAuth && (
+        <Switch>
+          <Route path='/' component={Home} exact />
+          <Route path='/posts' component={Posts} />
+          <Route path='/post/:id' component={Post} />
+          <Redirect to='/' />
+        </Switch>
+      )}
+    </>
+  )
+}
 
-export default App;
+export default withRouter(App)

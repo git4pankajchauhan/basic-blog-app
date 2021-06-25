@@ -1,4 +1,4 @@
-import { CLOSE_DRAWER, ERROR_MESSAGE, OPEN_DRAWER, SUCCESS_MESSAGE, WARNING_MESSAGE } from 'Store/constants/common.constant'
+import { CLOSE_DRAWER, ERROR_MESSAGE, OPEN_DRAWER, SUCCESS_MESSAGE, TOGGLE_LOADER, WARNING_MESSAGE } from 'Store/constants/common.constant'
 
 const initialState = {
   isDrawerOpen: false,
@@ -39,6 +39,13 @@ export const CommonReducer = (state = initialState, actions) => {
     return {
       ...state,
       isWarningMessage: actions.payload,
+    }
+  }
+
+  if (actions.type === TOGGLE_LOADER) {
+    return {
+      ...state,
+      isLoader: actions.payload,
     }
   }
 

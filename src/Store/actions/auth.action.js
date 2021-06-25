@@ -1,16 +1,14 @@
-import { saveTokenInLocalStorage, signup } from 'Services/auth.service'
-import { SIGNUP_CONFIRMED_ACTION } from 'Store/constants/auth.constant'
-import { errorMessage, successMessage } from './common.action'
+import { login, runLogoutTimer, saveTokenInLocalStorage, signup } from 'Services/auth.service'
+import { LOGIN_CONFIRMED_ACTION, LOGOUT_ACTION } from 'Store/constants/auth.constant'
+import { errorMessage, successMessage, toggleLoader } from './common.action'
 
 export const signupAction = (userdata, history) => async dispatch => {
   try {
     const response = await signup(userdata)
 
     if (response.data.status) {
-      dispatch(successMessage(response.data.message + ' redirecting in 5s'))
-      setTimeout(() => {
-        history.push('/login')
-      }, 5000)
+      dispatch(successMessage(response.data.message))
+      history.push('/login')
     } else {
       dispatch(errorMessage(response.data.message))
     }
@@ -18,61 +16,42 @@ export const signupAction = (userdata, history) => async dispatch => {
     console.log('signup action error:', error)
     dispatch(errorMessage('Oops! Something went wrong.'))
   }
+
+  dispatch(toggleLoader(false))
+}
+export const loginAction = (userdata, history) => async dispatch => {
+  try {
+    const response = await login(userdata)
+    console.log(response.data)
+    if (response.data.status) {
+      const { isAuth, token, user } = response.data
+
+      saveTokenInLocalStorage({ isAuth, token, user })
+      // runLogoutTimer(dispatch, response.data.expiresIn * 1000, history)
+      // dispatch(loginConfirmedAction({ isAuth, token, user }))
+      // history.push('/posts')
+    } else {
+      dispatch(errorMessage(response.data.message))
+    }
+  } catch (error) {
+    console.log('login action error:', error)
+    dispatch(errorMessage('Oops! Something went wrong.'))
+  }
+
+  dispatch(toggleLoader(false))
 }
 
-export const confirmedSignupAction = payload => ({
-  type: SIGNUP_CONFIRMED_ACTION,
-  payload,
-})
+export function loginConfirmedAction(data) {
+  return {
+    type: LOGIN_CONFIRMED_ACTION,
+    payload: data,
+  }
+}
 
-// export function signupFailedAction(message) {
-//   return {
-//     type: SIGNUP_FAILED_ACTION,
-//     payload: message,
-//   }
-// }
-
-// export function logout(history) {
-//   localStorage.removeItem('userDetails')
-//   history.push('/login')
-//   return {
-//     type: LOGOUT_ACTION,
-//   }
-// }
-
-// export function loginAction(email, password, history) {
-//   return dispatch => {
-//     login(email, password)
-//       .then(response => {
-//         saveTokenInLocalStorage(response.data)
-//         runLogoutTimer(dispatch, response.data.expiresIn * 1000, history)
-//         dispatch(loginConfirmedAction(response.data))
-//         history.push('/')
-//       })
-//       .catch(error => {
-//         const errorMessage = formatError(error.response.data)
-//         dispatch(loginFailedAction(errorMessage))
-//       })
-//   }
-// }
-
-// export function loginFailedAction(data) {
-//   return {
-//     type: LOGIN_FAILED_ACTION,
-//     payload: data,
-//   }
-// }
-
-// export function loginConfirmedAction(data) {
-//   return {
-//     type: LOGIN_CONFIRMED_ACTION,
-//     payload: data,
-//   }
-// }
-
-// export function loadingToggleAction(status) {
-//   return {
-//     type: LOADING_TOGGLE_ACTION,
-//     payload: status,
-//   }
-// }
+export function logout(history) {
+  localStorage.removeItem('userToken')
+  history.push('/login')
+  return {
+    type: LOGOUT_ACTION,
+  }
+}

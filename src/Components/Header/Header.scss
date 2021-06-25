@@ -21,6 +21,7 @@
       text-decoration: none;
       &.username {
         font-weight: bolder;
+        text-transform: capitalize;
         svg {
           font-size: 18px;
         }

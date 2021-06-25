@@ -1,21 +1,12 @@
-import './Loader.css'
+import React from 'react'
+import { LoaderDiv } from './Loader.style'
+
+import loaderImg from 'Assets/images/Line-Preloader.gif'
 
 export default function Loader(props) {
   return (
-    <>
-      <div className='loader-container'>
-        <div className='overlay'></div>
-        <div class='lds-roller'>
-          <div></div>
-          <div></div>
-          <div></div>
-          <div></div>
-          <div></div>
-          <div></div>
-          <div></div>
-          <div></div>
-        </div>
-      </div>
-    </>
+    <LoaderDiv {...props}>
+      <img className='loader' src={loaderImg} alt='Loading...' />
+    </LoaderDiv>
   )
 }
