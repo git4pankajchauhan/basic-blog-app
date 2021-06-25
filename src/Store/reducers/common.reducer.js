@@ -1,7 +1,10 @@
-import { TOGGLE_DRAWER, TOGGLE_LOADER } from 'Store/constants/common.constant'
+import { CLOSE_DRAWER, OPEN_DRAWER, TOGGLE_LOADER } from 'Store/constants/common.constant'
 
 const initialState = {
-  isDrawerOpen: false,
+  drawer: {
+    isOpen: false,
+    id: null,
+  },
   isLoader: false,
 }
 
@@ -12,10 +15,19 @@ export const CommonReducer = (state = initialState, actions) => {
       isLoader: actions.payload,
     }
   }
-  if (actions.type === TOGGLE_DRAWER) {
+  if (actions.type === OPEN_DRAWER) {
     return {
       ...state,
-      isDrawerOpen: actions.payload,
+      drawer: {
+        isOpen: true,
+        id: actions.payload,
+      },
+    }
+  }
+  if (actions.type === CLOSE_DRAWER) {
+    return {
+      ...state,
+      drawer: initialState.drawer,
     }
   }
   return state

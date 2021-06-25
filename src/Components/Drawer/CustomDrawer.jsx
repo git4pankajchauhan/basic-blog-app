@@ -1,28 +1,28 @@
 import { Close } from '@material-ui/icons'
 import React, { useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { toggleDrawer } from 'Store/actions/common.action'
+import { closeDrawer } from 'Store/actions/common.action'
 import { Drawer } from './Style/CustomDrawerStyle'
 
-const CustomDrawer = props => {
+const CustomDrawer = ({ headTitle, children, id }) => {
   const containerRef = useRef(null)
 
-  const isDrawerOpen = useSelector(state => state.common.isDrawerOpen)
+  const drawer = useSelector(state => state.common.drawer)
   const dispatch = useDispatch()
 
   const onClose = e => {
     if (containerRef.current === e.target) {
-      dispatch(toggleDrawer(false))
+      dispatch(closeDrawer())
     }
   }
 
-  return isDrawerOpen ? (
+  return drawer.isOpen && drawer.id === id ? (
     <Drawer ref={containerRef} onClick={onClose}>
       <div className='c-drawer-container'>
         <div className='c-drawer-head'>
-          <Close onClick={dispatch(toggleDrawer(false))} /> {props.headTitle}
+          <Close onClick={() => dispatch(closeDrawer())} /> {headTitle}
         </div>
-        <div className='c-drawer-children'>{props.children}</div>
+        <div className='c-drawer-children'>{children}</div>
       </div>
     </Drawer>
   ) : null

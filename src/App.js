@@ -23,7 +23,7 @@ const App = props => {
           <Route path='/' component={Home} exact />
           <Route path='/signup' component={Signup} />
           <Route path='/login' component={Login} />
-          <Redirect to='/login' />
+          {/* <Redirect to='/login' /> */}
         </Switch>
       )}
       {isAuth && (
@@ -31,7 +31,7 @@ const App = props => {
           <Route path='/' component={Home} exact />
           <Route path='/posts' component={Posts} />
           <Route path='/post/:id' component={Post} />
-          <Redirect to='/' />
+          {/* <Redirect to='/' /> */}
         </Switch>
       )}
     </>

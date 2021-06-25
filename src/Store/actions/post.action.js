@@ -1,5 +1,6 @@
 import { createPost, deletePost, getPosts, updatePost } from 'Services/posts.service'
 import { CONFIRMED_CREATE_POST_ACTION, CONFIRMED_DELETE_POST_ACTION, CONFIRMED_EDIT_POST_ACTION, CONFIRMED_GET_POSTS, GET_POSTS_BY_TAG } from 'Store/constants/post.constant'
+import { closeDrawer } from './common.action'
 
 export const getPostsAction = () => async (dispatch, getState) => {
   try {
@@ -20,12 +21,12 @@ export const getPostActionByTag = tags => ({
   payload: tags,
 })
 
-export const createPostAction = (postData, history) => async (dispatch, getState) => {
+export const createPostAction = postData => async (dispatch, getState) => {
   try {
     const result = await createPost(postData)
     const singlePost = result.data.lastpost
     dispatch(confirmedCreatePostAction(singlePost))
-    history.push('/posts')
+    dispatch(closeDrawer())
   } catch (error) {
     console.log('create post action error', error)
   }
@@ -36,11 +37,10 @@ export const confirmedCreatePostAction = post => ({
   payload: post,
 })
 
-export const deletePostAction = (postId, history) => async (dispatch, getState) => {
+export const deletePostAction = postId => async (dispatch, getState) => {
   try {
     await deletePost(postId)
     dispatch(confirmedDeletePostAction(postId))
-    history.push('/posts')
   } catch (error) {
     console.log('delete post action error', error)
   }
@@ -51,11 +51,11 @@ export const confirmedDeletePostAction = postId => ({
   payload: postId,
 })
 
-export const updatePostAction = (post, history) => async (dispatch, getState) => {
+export const updatePostAction = post => async (dispatch, getState) => {
   try {
     await updatePost(post._id, post)
     dispatch(confirmedUpdatePostAction(post))
-    history.push('/posts')
+    dispatch(closeDrawer())
   } catch (error) {
     console.log('update post action error', error)
   }
