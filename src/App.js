@@ -1,6 +1,7 @@
-import React, { useEffect } from 'react'
+import Loader from 'Components/Loader/Loader'
+import React, { Suspense, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Redirect, Route, Switch, withRouter } from 'react-router-dom'
+import { Route, Switch, withRouter } from 'react-router-dom'
 import { loadUserAction } from 'Store/actions/auth.action'
 import { Header, Home, Login, Post, Posts, Signup } from './Pages'
 
@@ -18,22 +19,23 @@ const App = props => {
   return (
     <>
       <Header />
-      {!isAuth && (
+      <Suspense fallback={<Loader />}>
         <Switch>
           <Route path='/' component={Home} exact />
-          <Route path='/signup' component={Signup} />
-          <Route path='/login' component={Login} />
-          {/* <Redirect to='/login' /> */}
+          {!isAuth && (
+            <>
+              <Route path='/signup' component={Signup} />
+              <Route path='/login' component={Login} />
+            </>
+          )}
+          {isAuth && (
+            <>
+              <Route path='/posts' component={Posts} />
+              <Route path='/post/:id' component={Post} />
+            </>
+          )}
         </Switch>
-      )}
-      {isAuth && (
-        <Switch>
-          <Route path='/' component={Home} exact />
-          <Route path='/posts' component={Posts} />
-          <Route path='/post/:id' component={Post} />
-          {/* <Redirect to='/' /> */}
-        </Switch>
-      )}
+      </Suspense>
     </>
   )
 }

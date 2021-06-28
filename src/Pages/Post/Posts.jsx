@@ -1,13 +1,13 @@
 import { Add } from '@material-ui/icons'
 import CustomButton from 'Components/Button/CustomButton'
-import CreatePostForm from 'Components/Post/CreatePostForm'
-import EditPostForm from 'Components/Post/EditPostForm '
-import Post from 'Components/Post/Post'
-import React, { useEffect, useState } from 'react'
+import React, { lazy, Suspense, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { openDrawer } from 'Store/actions/common.action'
 import { getPostActionByTag, getPostsAction } from 'Store/actions/post.action'
 import './Post.style.scss'
+const CreatePostForm = lazy(() => import('Components/Post/CreatePostForm'))
+const Post = lazy(() => import('Components/Post/Post'))
+const EditPostForm = lazy(() => import('Components/Post/EditPostForm'))
 
 const Posts = props => {
   const [search, setSearch] = useState('')
@@ -34,7 +34,7 @@ const Posts = props => {
     } else {
       dispatch(getPostsAction())
     }
-  }, [search])
+  }, [dispatch, search])
 
   return (
     <section className='post-section'>
@@ -47,12 +47,16 @@ const Posts = props => {
         </div>
         <div className='post-container'>
           {posts.map(post => (
-            <Post key={post._id} {...post} history={props.history} onPostEditClick={onPostEditClick} />
+            <Suspense fallback={<h1>Loading</h1>}>
+              <Post key={post._id} {...post} history={props.history} onPostEditClick={onPostEditClick} />
+            </Suspense>
           ))}
         </div>
       </div>
-      <CreatePostForm id='CREATE_POST' />
-      {post && <EditPostForm id='EDIT_POST' post={{ ...post }} />}
+      <Suspense fallback={<h1>Loading</h1>}>
+        <CreatePostForm id='CREATE_POST' />
+      </Suspense>
+      <Suspense fallback={<h1>Loading</h1>}>{post && <EditPostForm id='EDIT_POST' post={{ ...post }} />}</Suspense>
     </section>
   )
 }
