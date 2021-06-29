@@ -3,7 +3,7 @@ import React, { Suspense, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Route, Switch, withRouter } from 'react-router-dom'
 import { loadUserAction } from 'Store/actions/auth.action'
-import { Header, Home, Login, Post, Posts, Signup } from './Pages'
+import { Header, Home, Login, SinglePost, Posts, Signup } from './Pages'
 
 const App = props => {
   const isAuth = useSelector(state => state.auth.isAuth)
@@ -31,7 +31,7 @@ const App = props => {
           {isAuth && (
             <>
               <Route path='/posts' component={Posts} />
-              <Route path='/post/:id' component={Post} />
+              <Route path='/post/:id' component={SinglePost} />
             </>
           )}
         </Switch>

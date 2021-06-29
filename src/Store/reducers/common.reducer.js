@@ -8,7 +8,7 @@ const initialState = {
   isLoader: false,
 }
 
-export const CommonReducer = (state = initialState, actions) => {
+export default function CommonReducer(state = initialState, actions) {
   if (actions.type === TOGGLE_LOADER) {
     return {
       ...state,

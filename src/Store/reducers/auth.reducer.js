@@ -10,7 +10,7 @@ const initialState = {
   isAuth: false,
 }
 
-export function AuthReducer(state = initialState, action) {
+export default function AuthReducer(state = initialState, action) {
   if (action.type === USER_LOADED) {
     return {
       ...state,

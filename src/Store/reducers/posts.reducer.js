@@ -1,54 +1,74 @@
-import { CONFIRMED_CREATE_POST_ACTION, CONFIRMED_DELETE_POST_ACTION, CONFIRMED_EDIT_POST_ACTION, CONFIRMED_GET_POSTS, CREATE_POST_ACTION, GET_POSTS_BY_TAG } from '../constants/post.constant'
+import { post_type } from 'Store/constants'
 
 const initialState = {
   posts: [],
+  post: {},
+  allPost: [],
 }
 
-export default function PostsReducer(state = initialState, actions) {
-  if (actions.type === CONFIRMED_GET_POSTS) {
+export default function PostsReducer(state = initialState, { type, payload }) {
+  if (type === post_type.GET_POSTS) {
     return {
       ...state,
-      posts: actions.payload,
+      posts: payload,
+      allPost: payload,
     }
   }
 
-  if (actions.type === CONFIRMED_CREATE_POST_ACTION) {
-    const posts = [...state.posts, actions.payload]
+  if (type === post_type.CREATE_POST) {
+    const posts = [...state.posts, payload]
     return {
       ...state,
       posts,
+      allPost: posts,
     }
   }
 
-  if (actions.type === CONFIRMED_DELETE_POST_ACTION) {
+  if (type === post_type.DELETE_POST) {
     const posts = [...state.posts]
-    const postIndex = posts.findIndex(post => post._id === actions.payload)
+    const postIndex = posts.findIndex(post => post._id === payload)
     posts.splice(postIndex, 1)
     return {
       ...state,
       posts,
+      allPost: posts,
     }
   }
 
-  if (actions.type === CONFIRMED_EDIT_POST_ACTION) {
+  if (type === post_type.UPDATE_POST) {
     const posts = [...state.posts]
-    const postIndex = posts.findIndex(post => post._id === actions.payload._id)
+    const postIndex = posts.findIndex(post => post._id === payload._id)
 
-    posts[postIndex] = actions.payload
+    posts[postIndex] = payload
     return {
       ...state,
       posts,
+      allPost: posts,
     }
   }
 
-  if (actions.type === GET_POSTS_BY_TAG) {
-    const posts = [...state.posts]
-    const filtered_posts = posts.filter(post => post.tags.includes(actions.payload))
+  if (type === post_type.GET_SINGLE_POST) {
+    return {
+      ...state,
+      post: payload,
+    }
+  }
+
+  if (type === post_type.REMOVE_SINGLE_POST) {
+    return {
+      ...state,
+      post: initialState.post,
+    }
+  }
+
+  if (type === post_type.GET_FILTERED_POSTS) {
+    const posts = [...state.allPost]
+    const filtered_posts = posts.filter(post => post.tags.includes(payload))
+    console.log(filtered_posts)
     return {
       ...state,
       posts: filtered_posts,
     }
   }
-
   return state
 }

@@ -3,8 +3,9 @@ import CustomButton from 'Components/Button/CustomButton'
 import React, { lazy, Suspense, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { openDrawer } from 'Store/actions/common.action'
-import { getPostActionByTag, getPostsAction } from 'Store/actions/post.action'
+import { getAllPostsAction, getFilteredPostsAction } from 'Store/actions/post.action'
 import './Post.style.scss'
+
 const CreatePostForm = lazy(() => import('Components/Post/CreatePostForm'))
 const Post = lazy(() => import('Components/Post/Post'))
 const EditPostForm = lazy(() => import('Components/Post/EditPostForm'))
@@ -14,6 +15,7 @@ const Posts = props => {
   const [post, setPost] = useState(null)
 
   const dispatch = useDispatch()
+
   const posts = useSelector(state => state.posts.posts)
 
   const onSearch = e => {
@@ -30,11 +32,11 @@ const Posts = props => {
 
   useEffect(() => {
     if (search) {
-      dispatch(getPostActionByTag(search))
+      dispatch(getFilteredPostsAction(search))
     } else {
-      dispatch(getPostsAction())
+      dispatch(getAllPostsAction())
     }
-  }, [dispatch, search])
+  }, [search])
 
   return (
     <section className='post-section'>
@@ -47,9 +49,7 @@ const Posts = props => {
         </div>
         <div className='post-container'>
           {posts.map(post => (
-            <Suspense fallback={<h1>Loading</h1>}>
-              <Post key={post._id} {...post} history={props.history} onPostEditClick={onPostEditClick} />
-            </Suspense>
+            <Post key={post._id} {...post} history={props.history} onPostEditClick={onPostEditClick} />
           ))}
         </div>
       </div>

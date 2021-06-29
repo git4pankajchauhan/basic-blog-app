@@ -26,6 +26,9 @@ const EditPostForm = ({ id, post }) => {
 
   useEffect(() => {
     setSpost({ ...post })
+    return () => {
+      setSpost({})
+    }
   }, [post])
 
   return (
